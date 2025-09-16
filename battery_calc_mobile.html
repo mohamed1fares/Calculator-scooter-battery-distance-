@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>حساب استهلاك البطارية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Tahoma, Arial;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 20px;
+    }
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      max-width: 95%;
+      margin: 15px auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 15px;
+      width: 90%;
+      font-size: 18px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      padding: 15px 25px;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 95%;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🛵⚡ من مسافة → نسبة البطارية</h2>
+    <input type="number" id="distance" placeholder="اكتب المسافة بالكيلو">
+    <br>
+    <button onclick="calcPercent()">احسب الاستهلاك</button>
+    <div class="result" id="result1"></div>
+  </div>
+
+  <div class="box">
+    <h2>🛵⚡ من نسبة البطارية → مسافة</h2>
+    <input type="number" id="percent" placeholder="اكتب النسبة %">
+    <br>
+    <button onclick="calcDistance()">احسب المسافة</button>
+    <div class="result" id="result2"></div>
+  </div>
+
+  <script>
+    function calcPercent() {
+      let km = document.getElementById("distance").value;
+      if (km === "" || km <= 0) {
+        document.getElementById("result1").innerHTML = "⚠️ من فضلك اكتب مسافة صحيحة";
+        return;
+      }
+      let percent = km / 0.75;
+      if (percent > 100) {
+        document.getElementById("result1").innerHTML = "⚠️ المسافة أكبر من مدى البطارية (75 كم)";
+      } else {
+        document.getElementById("result1").innerHTML =
+          "الاستهلاك ≈ " + percent.toFixed(1) + "٪";
+      }
+    }
+
+    function calcDistance() {
+      let percent = document.getElementById("percent").value;
+      if (percent === "" || percent <= 0) {
+        document.getElementById("result2").innerHTML = "⚠️ من فضلك اكتب نسبة صحيحة";
+        return;
+      }
+      if (percent > 100) {
+        document.getElementById("result2").innerHTML = "⚠️ البطارية لا تزيد عن 100٪";
+      } else {
+        let km = percent * 0.75;
+        document.getElementById("result2").innerHTML =
+          "المسافة ≈ " + km.toFixed(1) + " كم";
+      }
+    }
+  </script>
+</body>
+</html>
