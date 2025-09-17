@@ -75,15 +75,12 @@
 </head>
 <body>
 
-    <div class="box">
-    <h2> الموقع مصمم للبطاريه الليثيوم ٢٥ امبير </h2>
-      <h3>  من حيث انها الشاحنه الكامله ٧٥كم علي السرعه الثانيه</h3>
-      
-    
+  <div class="box">
+    <h2> الموقع مصمم لحساب  نسبه استهلاك البطاريه للمشوار  </h2>
+    <h3> حدد مدى الشحنة الكاملة (افتراضي ٧٥ كم) </h3>
+    <input type="number" id="maxRange" placeholder="ادخل مدى الشحنة الكاملة بالكيلو" value="75">
   </div>
 
-  
-  
   <div class="box">
     <h2> من كيلومتر الي نسبه استهلاك البطاريه</h2>
     <input type="number" id="distance" placeholder="اكتب المسافة بالكيلو">
@@ -107,15 +104,26 @@
   </footer>
 
   <script>
+    function getMaxRange() {
+      let range = document.getElementById("maxRange").value;
+      if (range === "" || range <= 0) {
+        return 75; // القيمة الافتراضية
+      }
+      return parseFloat(range);
+    }
+
     function calcPercent() {
       let km = document.getElementById("distance").value;
+      let maxRange = getMaxRange();
+
       if (km === "" || km <= 0) {
         document.getElementById("result1").innerHTML = "⚠️ من فضلك اكتب مسافة صحيحة";
         return;
       }
-      let percent = km / 0.75;
+
+      let percent = (km / maxRange) * 100;
       if (percent > 100) {
-        document.getElementById("result1").innerHTML = "⚠️ المسافة أكبر من مدى البطارية (75 كم)";
+        document.getElementById("result1").innerHTML = "⚠️ المسافة أكبر من مدى البطارية (" + maxRange + " كم)";
       } else {
         document.getElementById("result1").innerHTML =
           "الاستهلاك ≈ " + percent.toFixed(1) + "٪";
@@ -124,6 +132,8 @@
 
     function calcDistance() {
       let percent = document.getElementById("percent").value;
+      let maxRange = getMaxRange();
+
       if (percent === "" || percent <= 0) {
         document.getElementById("result2").innerHTML = "⚠️ من فضلك اكتب نسبة صحيحة";
         return;
@@ -131,7 +141,7 @@
       if (percent > 100) {
         document.getElementById("result2").innerHTML = "⚠️ البطارية لا تزيد عن 100٪";
       } else {
-        let km = percent * 0.75;
+        let km = (percent / 100) * maxRange;
         document.getElementById("result2").innerHTML =
           "المسافة ≈ " + km.toFixed(1) + " كم";
       }
