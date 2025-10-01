@@ -10,6 +10,7 @@
       background: #f4f4f4;
       text-align: center;
       padding: 20px;
+      direction: rtl;
     }
     .box {
       background: white;
@@ -19,7 +20,7 @@
       margin: 15px auto;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
-    h2 h3 {
+    h2, h3 {
       font-size: 20px;
       margin-bottom: 20px;
     }
@@ -97,6 +98,16 @@
     <div class="result" id="result2"></div>
   </div>
 
+  <!-- ✅ سكشن جديد لحساب وقت الشحن -->
+  <div class="box">
+    <h2> حساب وقت شحن البطارية </h2>
+    <input type="number" id="chargeRate" placeholder="نسبة الشحن في الساعة %" value="20">
+    <input type="number" id="currentCharge" placeholder="النسبة الحالية للبطارية %">
+    <br>
+    <button onclick="calcChargeTime()">احسب وقت الشحن</button>
+    <div class="result" id="result3"></div>
+  </div>
+
   <footer>
     <h3>تم التطوير بواسطة المهندس محمد فارس</h3>
     <p>📧 البريد الإلكتروني: <a href="mailto:mf7059708@gmail.com">mf7059708@gmail.com</a></p>
@@ -145,6 +156,40 @@
         document.getElementById("result2").innerHTML =
           "المسافة ≈ " + km.toFixed(1) + " كم";
       }
+    }
+
+    // ✅ دالة حساب وقت الشحن مع عرض الساعة بالعربي 12h
+    function calcChargeTime() {
+      let chargeRate = parseFloat(document.getElementById("chargeRate").value) || 20;
+      let current = parseFloat(document.getElementById("currentCharge").value);
+
+      if (isNaN(current) || current < 0 || current >= 100) {
+        document.getElementById("result3").innerHTML = "⚠️ من فضلك اكتب نسبة بطارية صحيحة أقل من 100";
+        return;
+      }
+
+      let remaining = 100 - current; 
+      let hoursNeeded = remaining / chargeRate; 
+
+      // حساب الوقت الفعلي
+      let now = new Date();
+      let finishTime = new Date(now.getTime() + hoursNeeded * 60 * 60 * 1000);
+
+      let hours = finishTime.getHours();
+      let minutes = finishTime.getMinutes();
+      let period = hours >= 12 ? "مساءً" : "صباحًا";
+
+      // تحويل لـ 12 ساعة
+      hours = hours % 12;
+      hours = hours ? hours : 12; 
+
+      // تحويل للأرقام العربية
+      let arabicNums = n => n.toString().replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+      let timeString = arabicNums(hours) + ":" + arabicNums(minutes.toString().padStart(2, "0")) + " " + period;
+
+      document.getElementById("result3").innerHTML =
+        "⏳ وقت الشحن المطلوب ≈ " + hoursNeeded.toFixed(2) + " ساعة<br>" +
+        "⌚ البطارية هتكون فل الساعة " + timeString;
     }
   </script>
 </body>
